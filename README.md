@@ -27,21 +27,7 @@ Main Features:
 * Structured test organization using Playwright test runner
 
 Folder Structure
-Playwright Project/
-│
-├── tests/                  
-│   ├── UserCreation.spec.js
-│   ├── ABC.spec.js
-│   ├── AddStudent.spec.js
-│   ├── New.spec.js
-│   └── example.spec.js
-│
-├── playwright.config.js    # Playwright configuration
-├── package.json            # Project dependencies
-├── package-lock.json       # Locked dependency versions
-├── node_modules/           # Installed packages
-├── playwright-report/      # Test execution reports
-└── test-results/           # Test artifacts and results
+tests/UserCreation.spec.js 
 
 Installations Steps
 * Install Node.js
