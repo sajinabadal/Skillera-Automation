@@ -35,8 +35,13 @@ test('test', async ({ page }) => {
   // Create student
   await page.getByRole('button', { name: 'Create Student' }).click();
 
-  // Done (kept as you wrote)
-  await page.getByRole('button', { name: 'Done' }).click();
+// wait for Done safely
+const doneButton = page.getByRole('button', { name: /done/i });
+
+await expect(doneButton).toBeVisible({ timeout: 15000 });
+await expect(doneButton).toBeEnabled();
+
+await doneButton.click();
 
   // -------------------------
   // LOGOUT (FIXED PART)
