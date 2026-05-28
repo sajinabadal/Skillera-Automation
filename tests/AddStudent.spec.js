@@ -1,27 +1,58 @@
 import { test, expect } from '@playwright/test';
 
 test('test', async ({ page }) => {
+
   await page.goto('https://skillera-saas-frontend.vercel.app/');
-  await page.getByRole('textbox', { name: 'Email Address' }).click();
+
+  // Login
   await page.getByRole('textbox', { name: 'Email Address' }).fill('rejmee@gmail.com');
-  await page.getByRole('textbox', { name: 'Password' }).click();
   await page.getByRole('textbox', { name: 'Password' }).fill('Welcome@123');
+
   await page.getByRole('button', { name: 'Sign In' }).click();
+
+  // Go to Students
   await page.getByRole('link', { name: 'Students' }).click();
+
+  // Add Student
   await page.getByRole('button', { name: 'Add Student' }).click();
+
+  // Select batch (search + select)
   await page.getByRole('combobox').filter({ hasText: 'Select a batch' }).click();
-  await page.getByRole('button', { name: 'Winter Batch' }).click();
-  await page.getByRole('textbox', { name: 'First Name *' }).click();
-  await page.getByRole('textbox', { name: 'First Name *' }).fill('jahn');
-  await page.getByRole('textbox', { name: 'Last Name *' }).click();
-  await page.getByRole('textbox', { name: 'Last Name *' }).fill('doe');
-  await page.getByRole('textbox', { name: 'Email *' }).click();
-  await page.getByRole('textbox', { name: 'Email *' }).fill('jahn@gmail.com');
-  await page.getByRole('textbox', { name: 'Default Password *' }).dblclick();
-  await page.getByRole('textbox', { name: 'Default Password *' }).fill('Welcome@123');
+
+  await page.getByRole('textbox', { name: 'Search batches...' }).fill('summer');
+
+  await page.getByRole('button', { name: 'Summer Batch' }).click();
+
+  // Fill student details
+  await page.getByRole('textbox', { name: 'First Name *' }).fill('ram');
+  await page.getByRole('textbox', { name: 'Last Name *' }).fill('shree');
+  await page.getByRole('textbox', { name: 'Email *' }).fill('shree@gmail.com');
+
+  // Gender
   await page.getByRole('combobox').filter({ hasText: 'Select gender' }).click();
-  await page.getByLabel('Male', { exact: true }).getByText('Male').click();
+  await page.getByLabel('Female').getByText('Female').click();
+
+  // Create student
   await page.getByRole('button', { name: 'Create Student' }).click();
+
+  // Done (kept as you wrote)
   await page.getByRole('button', { name: 'Done' }).click();
-  await page.getByRole('button', { name: 'RA Rejmee aa rejmee@gmail.com' }).click();
+
+  // -------------------------
+  // LOGOUT (FIXED PART)
+  // -------------------------
+
+  await page.getByRole('button', {
+    name: /Rejmee aa/i
+  }).click();
+
+  await page.getByRole('menuitem', {
+    name: 'Log out'
+  }).click();
+
+  // Verify logout success
+  await expect(
+    page.getByRole('button', { name: 'Sign In' })
+  ).toBeVisible();
+
 });
