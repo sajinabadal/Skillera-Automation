@@ -34,15 +34,15 @@ Installations Steps
 * Install Git
 * Install Playwright 
 
-How to Run Tests
+
 Run all tests
-npx playwright test
+-npx playwright test
 
 Run a specific test file
-npx playwright test tests/UserCreation.spec.js
+-npx playwright test tests/UserCreation.spec.js
 
 Run tests in headed mode
-npx playwright test --headed
+-npx playwright test --headed
 
 View HTML report
-npx playwright show-report
+-npx playwright show-report
