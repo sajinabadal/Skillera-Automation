@@ -1,44 +1,98 @@
 import { test, expect } from '@playwright/test';
 
-test('Manager creates Trainer user and logs out', async ({ page }) => {
+test('Manager - Create, Update, Delete User and Logout', async ({ page }) => {
 
-  const userName = `nice_${Date.now()}`;
-  const userEmail = `${userName}@gmail.com`;
 
-  // Open app
+  // Test Data
+ 
+  const id = Date.now();
+
+  const fullName = `User_${id}`;
+  const updatedFirstName = `Updated_${id}`;
+  const email = `user_${id}@gmail.com`;
+
+  // Open Application
+
   await page.goto('https://skillera-saas-frontend.vercel.app/');
 
-  // Login (Manager)
-  await page.getByRole('textbox', { name: 'Email Address' }).fill('rejmee@gmail.com');
-  await page.getByRole('textbox', { name: 'Password' }).fill('Welcome@123');
+  // Login
 
-  await page.getByRole('button', { name: 'Sign In' }).click();
+  await page.getByRole('textbox', {
+    name: 'Email Address'
+  }).fill('rejmee@gmail.com');
 
-  // Wait for dashboard
+  await page.getByRole('textbox', {
+    name: 'Password'
+  }).fill('Welcome@123');
+
+  await page.getByRole('button', {
+    name: 'Sign In'
+  }).click();
+
   await page.waitForLoadState('networkidle');
 
   // Navigate to Users
-  await page.getByRole('link', { name: 'Users' }).click();
 
-  // Create User
-  await page.getByRole('button', { name: 'Create User' }).click();
+  await page.getByRole('link', {
+    name: 'Users'
+  }).click();
 
-  await page.getByRole('textbox', { name: 'Full Name' }).fill(userName);
-  await page.getByRole('textbox', { name: 'Email' }).fill(userEmail);
+  // CREATE USER
 
-  // Select role Trainer
-  await page.getByRole('combobox').click();
-  await page.getByRole('option', { name: 'Trainer' }).click();
+  await page.getByRole('button', {
+    name: 'Create User'
+  }).click();
 
-  // Submit
-  await page.getByRole('button', { name: 'Create User' }).click();
+  await page.getByRole('textbox', {
+    name: 'Full Name'
+  }).fill(fullName);
 
-  // Verify user created
-  await expect(page.getByText(userEmail)).toBeVisible();
+  await page.getByRole('textbox', {
+    name: 'Email'
+  }).fill(email);
 
-  // -------------------------
-  // LOGOUT (FIXED PART)
-  // -------------------------
+  await page.getByRole('button', {
+    name: 'Create User'
+  }).click();
+
+  // Verify creation
+  await expect(page.getByText(email)).toBeVisible();
+
+  // UPDATE USER
+
+  await page.getByRole('button')
+    .filter({ hasText: /^$/ })
+    .nth(1)
+    .click();
+
+  await page.getByRole('textbox', {
+    name: 'First Name'
+  }).fill(updatedFirstName);
+
+  await page.getByRole('button', {
+    name: 'Update User'
+  }).click();
+
+  // Verify update
+  await expect(page.getByText(updatedFirstName)).toBeVisible();
+
+  // DELETE USER
+
+  await page.getByRole('button')
+    .filter({ hasText: /^$/ })
+    .nth(2)
+    .click();
+
+  await page.getByRole('button', {
+    name: 'Delete'
+  }).click();
+
+  // Verify deletion
+  
+  await expect(page.getByText(email)).not.toBeVisible();
+
+  // LOGOUT
+
   await page.getByRole('button', {
     name: /Rejmee aa/i
   }).click();
@@ -48,8 +102,11 @@ test('Manager creates Trainer user and logs out', async ({ page }) => {
   }).click();
 
   // Verify logout success
+
   await expect(
-    page.getByRole('button', { name: 'Sign In' })
+    page.getByRole('button', {
+      name: 'Sign In'
+    })
   ).toBeVisible();
 
 });
